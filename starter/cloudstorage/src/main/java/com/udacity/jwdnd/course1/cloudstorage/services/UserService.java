@@ -40,6 +40,7 @@ public class UserService {
         return userMapper.getUser(username)==null;
     }
 
+    //TODO is there a cleaner way to do this? Like can the user service access the authentication token by itself?
     public Integer getLoggedInUserId(Authentication authentication){
         return userMapper.getUser(authentication.getName()).getUserId();
     }
