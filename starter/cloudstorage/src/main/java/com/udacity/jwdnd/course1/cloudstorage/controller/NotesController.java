@@ -27,6 +27,7 @@ public class NotesController {
         return "redirect:/home";
     }
 
+    //TODO rename to reflect that this is an "add-update-note" endpoint (and not just add-note)
     //TODO URL mappings look kinda weird the way you've implemented it(e.g. after you invoke delete-note or add-note, maybe you should re-direct to home page with the right tab selected, so that the home page URL is shown in the URL bar rather than the last operation)
     //TODO remember to either remove H2 DB persistence across server restarts from application.properties or use a different config for testing if needed - you could also just clear all data between tests if needed
     @PostMapping("/add-note")

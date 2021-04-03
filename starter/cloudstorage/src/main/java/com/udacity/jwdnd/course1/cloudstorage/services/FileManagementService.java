@@ -49,4 +49,12 @@ public class FileManagementService {
                 .userId(file.getUserId())
                 .build();
     }
+
+    public void deleteFile(Integer fileId) {
+        fileMapper.deleteFile(fileId);
+    }
+
+    public Files getFileByFileId(Long fileId) {
+        return fileMapper.getFile(fileId);
+    }
 }
