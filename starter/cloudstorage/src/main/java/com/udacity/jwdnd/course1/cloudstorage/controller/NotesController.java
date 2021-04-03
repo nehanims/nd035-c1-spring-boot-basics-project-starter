@@ -23,7 +23,7 @@ public class NotesController {
     @GetMapping("/delete-note/{id}")
     public String deleteNote(@PathVariable("id") Integer noteId, Authentication authentication, Model model){
         notesService.deleteNote(noteId);
-        setModel(authentication, model);
+        //setModel(authentication, model);
         return "redirect:/home";
     }
 
@@ -33,11 +33,11 @@ public class NotesController {
     @PostMapping("/add-note")
     public String addNote(NoteForm noteForm, Authentication authentication, Model model){
         notesService.addNote(noteForm, userService.getLoggedInUserId(authentication));
-        setModel(authentication, model);
+        //setModel(authentication, model);
         return "redirect:/home";
     }
 
-    private void setModel(Authentication authentication, Model model) {
+   /* private void setModel(Authentication authentication, Model model) {
         model.addAttribute("notes", notesService.getNotes(userService.getLoggedInUserId(authentication)));
-    }
+    }*/
 }
