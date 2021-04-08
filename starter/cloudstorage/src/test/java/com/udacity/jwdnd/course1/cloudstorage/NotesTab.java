@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
 public class NotesTab {
 
     public static final String TITLE1 = "Test Note Title 1";
-    public static final String TITLE1_EDITED = "Test Note Edited Title 1";
+    public static final String TITLE1_EDITED = "Note1 Edited Title";
     public static final String TITLE2 = "Test Note Title 2";
 
     public static final String DESCRIPTION1 = "Test Note Description 1";
     public static final String DESCRIPTION2 = "Test Note Description 2";
-    public static final String DESCRIPTION2_EDITED = "Test Note Edited Description 2";
+    public static final String DESCRIPTION2_EDITED = "Note2 Edited Description";
     private final WebDriver driver;
     private final WebDriverWait wait;
 
@@ -56,6 +56,7 @@ public class NotesTab {
     }
 
     public void editNote(Note note, String newTitle, String newDescription) {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("notesTable")));
         note.editButton.click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("note-title")));
         saveNoteForm(newTitle, newDescription);
@@ -71,11 +72,11 @@ public class NotesTab {
     }
 
     private void saveNoteForm(String title, String description) {
+        noteTitleField.clear();
         noteTitleField.click();
-        //noteTitleField.clear();
         noteTitleField.sendKeys(title);
+        noteDescriptionField.clear();
         noteDescriptionField.click();
-        //noteTitleField.clear();
         noteDescriptionField.sendKeys(description);
         saveNoteButton.click();
     }

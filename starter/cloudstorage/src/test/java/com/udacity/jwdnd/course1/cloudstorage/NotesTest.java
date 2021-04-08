@@ -4,7 +4,6 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -58,7 +57,7 @@ public class NotesTest {
 
     @Test
     @Order(1)
-    public void testNoteCreation(){
+    public void testAddNote(){
         notesTab.addNote(NotesTab.TITLE1, NotesTab.DESCRIPTION1);
         webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("notesTable")));
         List<Note> notes = notesTab.getNotes();
@@ -81,7 +80,7 @@ public class NotesTest {
 
     @Test
     @Order(2)
-    public void testNoteDeletion(){
+    public void testDeleteNote(){
 
         webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("notesTable")));
         List<Note> notes = notesTab.getNotes();
@@ -108,9 +107,9 @@ public class NotesTest {
 
     }
 
-  /*  @Test
+    @Test
     @Order(3)
-    public void testNoteEdit() {
+    public void testEditNote() {
         notesTab.addNote(NotesTab.TITLE1, NotesTab.DESCRIPTION1);
         webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("notesTable")));
 
@@ -123,25 +122,27 @@ public class NotesTest {
         assertEquals(note1.title, NotesTab.TITLE1);
         assertEquals(note1.description, NotesTab.DESCRIPTION1);
 
+        notesTab.editNote(note1, NotesTab.TITLE1_EDITED, NotesTab.DESCRIPTION1);
+
+        notes = notesTab.getNotes();//TODO is there a better way to do this?
+
         Note note2 = notes.get(1);
         assertEquals(note2.title, NotesTab.TITLE2);
         assertEquals(note2.description, NotesTab.DESCRIPTION2);
 
-        notesTab.editNote(note1, NotesTab.TITLE1_EDITED, NotesTab.DESCRIPTION1);
         notesTab.editNote(note2, NotesTab.TITLE2, NotesTab.DESCRIPTION2_EDITED);
 
-        webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("notesTable")));
         notes = notesTab.getNotes();
 
         note1 = notes.get(0);
-        assertEquals(note1.title, NotesTab.TITLE1_EDITED);
-        assertEquals(note1.description, NotesTab.DESCRIPTION1);
+        assertEquals(NotesTab.TITLE1_EDITED, note1.title);
+        assertEquals(NotesTab.DESCRIPTION1, note1.description);
 
         note2 = notes.get(1);
         assertEquals(note2.title, NotesTab.TITLE2);
         assertEquals(note2.description, NotesTab.DESCRIPTION2_EDITED);
 
 
-    }*/
+    }
 
 }
