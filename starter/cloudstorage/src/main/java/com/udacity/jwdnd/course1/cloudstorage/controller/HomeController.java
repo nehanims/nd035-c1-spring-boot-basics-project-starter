@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import java.util.Collections;
+
 @Controller
 public class HomeController {
 
@@ -26,16 +28,16 @@ public class HomeController {
     }
 
     @GetMapping("/home")
-    public String getHomePage(NoteForm noteForm, Authentication authentication, Model model){
-        final Integer loggedInUserId = userService.getLoggedInUserId(authentication);
-        model.addAttribute("notes", notesService.getNotes(loggedInUserId));
-        model.addAttribute("files", fileService.getFiles(loggedInUserId));
-        model.addAttribute("credentials", credentialsService.getCredentials(loggedInUserId));
+    public String getHomePage(NoteForm noteForm){
         return "home";
     }
 
     @ModelAttribute
-    public void addModelAttribute(Model model){
+    public void addModelAttribute(Authentication authentication, Model model){
+        final Integer loggedInUserId = userService.getLoggedInUserId(authentication);
+        model.addAttribute("notes", notesService.getNotes(loggedInUserId));
+        model.addAttribute("files", fileService.getFiles(loggedInUserId));
+        model.addAttribute("credentials", credentialsService.getCredentials(loggedInUserId));
         model.addAttribute("selectedTab", navigationService.getSelectedTab());
     }
 }
