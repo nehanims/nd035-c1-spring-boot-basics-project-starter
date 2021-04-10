@@ -35,9 +35,6 @@ public class NotesTab {
     @FindBy(id="note-description")
     private WebElement noteDescriptionField;
 
-    @FindBy(id="noteModal")
-    private WebElement noteModalDialog;
-
     public NotesTab(WebDriver driver, WebDriverWait wait) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
@@ -52,12 +49,12 @@ public class NotesTab {
     }
 
     public void deleteNote(Note note) {
-        note.deleteButton.click();
+        note.getDeleteButton().click();
     }
 
     public void editNote(Note note, String newTitle, String newDescription) {
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("notesTable")));
-        note.editButton.click();
+        note.getEditButton().click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("note-title")));
         saveNoteForm(newTitle, newDescription);
     }
@@ -75,9 +72,11 @@ public class NotesTab {
         noteTitleField.clear();
         noteTitleField.click();
         noteTitleField.sendKeys(title);
+
         noteDescriptionField.clear();
         noteDescriptionField.click();
         noteDescriptionField.sendKeys(description);
+
         saveNoteButton.click();
     }
 }

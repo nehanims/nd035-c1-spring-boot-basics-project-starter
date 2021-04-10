@@ -8,7 +8,7 @@ import java.util.List;
 
 @Mapper
 public interface CredentialsMapper {
-    @Select("SELECT * FROM Credentials WHERE userid=#{loggedInUserId}")
+    @Select("SELECT * FROM Credentials WHERE userid=#{loggedInUserId} ORDER BY credentialId")
     List<Credentials> getCredentials(Integer loggedInUserId);
 
     @Insert("INSERT INTO Credentials (url, username, key, password, userid) VALUES(#{url}, #{username}, #{key}, #{password}, #{userid})")
@@ -18,6 +18,9 @@ public interface CredentialsMapper {
     @Update("UPDATE Credentials SET username=#{username}, url=#{url}, key=#{key}, password=#{password} WHERE credentialId=#{credentialId}")
     void updateCredentials(Credentials credentials);
 
-    @Delete("DELETE FROM Credentials WHERE credentialId=#{credentialsId}")
-    void deleteCrededntials(Integer credentialId);
+    @Delete("DELETE FROM Credentials WHERE credentialId=#{credentialId}")
+    void deleteCredential(Integer credentialId);
+
+    @Select("SELECT * FROM Credentials WHERE credentialid=#{id}")
+    Credentials getCredentialByCredentialId(Integer id);
 }

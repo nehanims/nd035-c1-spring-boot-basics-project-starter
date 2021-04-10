@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -69,12 +68,12 @@ public class NotesTest {
         assertTrue(notes.size()==2);
 
         Note note1 = notes.get(0);
-        assertEquals(NotesTab.TITLE1, note1.title);
-        assertEquals(NotesTab.DESCRIPTION1, note1.description);
+        assertEquals(NotesTab.TITLE1, note1.getTitle());
+        assertEquals(NotesTab.DESCRIPTION1, note1.getDescription());
 
         Note note2 = notes.get(1);
-        assertEquals(NotesTab.TITLE2, note2.title);
-        assertEquals(NotesTab.DESCRIPTION2, note2.description);
+        assertEquals(NotesTab.TITLE2, note2.getTitle());
+        assertEquals(NotesTab.DESCRIPTION2, note2.getDescription());
 
     }
 
@@ -82,24 +81,28 @@ public class NotesTest {
     @Order(2)
     public void testDeleteNote(){
 
+        //verify that 2 records are available and verify the content of the records
         webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("notesTable")));
         List<Note> notes = notesTab.getNotes();
-        assertTrue(notes.size()==2);
+        assertEquals(2, notes.size());
         Note note1 = notes.get(0);
-        assertEquals(NotesTab.TITLE1, note1.title);
-        assertEquals(NotesTab.DESCRIPTION1, note1.description);
+        assertEquals(NotesTab.TITLE1, note1.getTitle());
+        assertEquals(NotesTab.DESCRIPTION1, note1.getDescription());
         Note note2 = notes.get(1);
-        assertEquals(NotesTab.TITLE2, note2.title);
-        assertEquals(NotesTab.DESCRIPTION2, note2.description);
+        assertEquals(NotesTab.TITLE2, note2.getTitle());
+        assertEquals(NotesTab.DESCRIPTION2, note2.getDescription());
 
+        //delete 1st record and verify that 1 record is available and the correct record was deleted
+        // (by checking that the remaining record is the one that was not deleted)
         notesTab.deleteNote(note1);
 
         notes = notesTab.getNotes();
         assertTrue(notes.size()==1);
         note2 = notes.get(0);
-        assertEquals(NotesTab.TITLE2, note2.title);
-        assertEquals(NotesTab.DESCRIPTION2, note2.description);
+        assertEquals(NotesTab.TITLE2, note2.getTitle());
+        assertEquals(NotesTab.DESCRIPTION2, note2.getDescription());
 
+        //delete the remaining record and verify that no record is available
         notesTab.deleteNote(note2);
 
         notes = notesTab.getNotes();
@@ -119,29 +122,28 @@ public class NotesTest {
         assertTrue(notes.size()==2);
 
         Note note1 = notes.get(0);
-        assertEquals(note1.title, NotesTab.TITLE1);
-        assertEquals(note1.description, NotesTab.DESCRIPTION1);
+        assertEquals(note1.getTitle(), NotesTab.TITLE1);
+        assertEquals(note1.getDescription(), NotesTab.DESCRIPTION1);
 
         notesTab.editNote(note1, NotesTab.TITLE1_EDITED, NotesTab.DESCRIPTION1);
 
         notes = notesTab.getNotes();//TODO is there a better way to do this?
 
         Note note2 = notes.get(1);
-        assertEquals(note2.title, NotesTab.TITLE2);
-        assertEquals(note2.description, NotesTab.DESCRIPTION2);
+        assertEquals(note2.getTitle(), NotesTab.TITLE2);
+        assertEquals(note2.getDescription(), NotesTab.DESCRIPTION2);
 
         notesTab.editNote(note2, NotesTab.TITLE2, NotesTab.DESCRIPTION2_EDITED);
 
         notes = notesTab.getNotes();
 
         note1 = notes.get(0);
-        assertEquals(NotesTab.TITLE1_EDITED, note1.title);
-        assertEquals(NotesTab.DESCRIPTION1, note1.description);
+        assertEquals(NotesTab.TITLE1_EDITED, note1.getTitle());
+        assertEquals(NotesTab.DESCRIPTION1, note1.getDescription());
 
         note2 = notes.get(1);
-        assertEquals(note2.title, NotesTab.TITLE2);
-        assertEquals(note2.description, NotesTab.DESCRIPTION2_EDITED);
-
+        assertEquals(note2.getTitle(), NotesTab.TITLE2);
+        assertEquals(note2.getDescription(), NotesTab.DESCRIPTION2_EDITED);
 
     }
 

@@ -10,13 +10,13 @@ public class HomePage {
     @FindBy(id="logoutButton")
     private WebElement logoutButton;
 
-    @FindBy(id= "nav-files")
+    @FindBy(id= "nav-files-tab")
     private WebElement filesTab;
 
     @FindBy(id="nav-notes-tab")
     private WebElement notesTab;
 
-    @FindBy(id="nav-credentials")
+    @FindBy(id="nav-credentials-tab")
     private WebElement credentialsTab;
 
     private SignupPage signupPage;

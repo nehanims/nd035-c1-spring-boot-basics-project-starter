@@ -1,14 +1,16 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
+import lombok.Data;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+@Data
 public class Note{
     // TODO Can you add @FindBy to these fields and see if you could pass the driver and use PageFactory on the fly to initialize this note object using tr note element
-    String title;
-    String description;
-    WebElement deleteButton;
-    WebElement editButton;
+    private String title;
+    private String description;
+    private WebElement deleteButton;
+    private WebElement editButton;
 
     public Note(WebElement noteElement) {
         editButton = noteElement.findElement(By.cssSelector("td > button"));
