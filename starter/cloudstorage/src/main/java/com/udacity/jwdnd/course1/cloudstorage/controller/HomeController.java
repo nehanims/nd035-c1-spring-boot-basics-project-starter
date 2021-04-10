@@ -8,8 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
-import java.util.Collections;
-
 @Controller
 public class HomeController {
 
@@ -18,13 +16,15 @@ public class HomeController {
     private final FileManagementService fileService;
     private final CredentialsService credentialsService;
     private final NavigationService navigationService;
+    private final EncryptionService encryptionService;
 
-    public HomeController(UserService userService, NotesService notesService, FileManagementService fileService, CredentialsService credentialsService, NavigationService navigationService) {
+    public HomeController(UserService userService, NotesService notesService, FileManagementService fileService, CredentialsService credentialsService, NavigationService navigationService, EncryptionService encryptionService) {
         this.userService = userService;
         this.notesService = notesService;
         this.fileService = fileService;
         this.credentialsService = credentialsService;
         this.navigationService = navigationService;
+        this.encryptionService = encryptionService;
     }
 
     @GetMapping("/home")
@@ -39,5 +39,6 @@ public class HomeController {
         model.addAttribute("files", fileService.getFiles(loggedInUserId));
         model.addAttribute("credentials", credentialsService.getCredentials(loggedInUserId));
         model.addAttribute("selectedTab", navigationService.getSelectedTab());
+        model.addAttribute("encryptionService", encryptionService);
     }
 }

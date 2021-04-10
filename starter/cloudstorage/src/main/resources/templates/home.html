@@ -32,7 +32,7 @@
                                         <label for="fileUpload">Upload a New File:</label>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="file" class="form-control-file" id="fileUpload" name="fileUpload">
+                                        <input type="file" class="form-control-file" id="fileUpload" name="fileUpload" required>
                                     </div>
                                     <div class="col-sm-4">
                                         <button id="fileUploadSubmitButton" type="submit" class="btn btn-dark">Upload</button>
@@ -136,7 +136,7 @@
                                 <tbody>
                                 <tr th:each="credential : ${credentials}">
                                     <td>
-                                        <button th:onclick="javascript:showCredentialModal([[${credential.credentialId}]], [[${credential.url}]], [[${credential.username}]], [[${credential.password}]] )"
+                                        <button th:onclick="javascript:showCredentialModal([[${credential.credentialId}]], [[${credential.url}]], [[${credential.username}]], [[${encryptionService.decryptValue(credential.password, credential.key)}]], [[${credential.key}]] )"
                                                 type="button" class="btn btn-success">Edit</button>
                                         <a th:href="@{/delete-credential/{id}(id=${credential.credentialId})}" class="btn btn-danger">Delete</a>
                                     </td>
@@ -160,9 +160,10 @@
                                     <div class="modal-body">
                                         <form th:action="@{/save-credential}" th:object="${credential}" action="#" method="POST">
                                             <input type="hidden" name="credentialId" id="credential-id">
+                                            <input type="hidden" name="key" id="credential-key">
                                             <div class="form-group">
                                                 <label for="note-title" class="col-form-label">URL</label>
-                                                <input type="text" name= "url" class="form-control" id="credential-url" maxlength="100" required>
+                                                <input type="text" name= "url" class="form-control" id="credential-url" maxlength="100" required title="Well formed web (HTTP/HTTPS) URL" pattern="https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)">
                                             </div>
                                             <div class="form-group">
                                                 <label for="note-title" class="col-form-label">Username</label>
@@ -202,13 +203,16 @@
             }
 
             // For opening the credentials modal
-            function showCredentialModal(credentialId, url, username, password) {
+            function showCredentialModal(credentialId, url, username, password, key) {
                 $('#credential-id').val(credentialId ? credentialId : '');
                 $('#credential-url').val(url ? url : '');
                 $('#credential-username').val(username ? username : '');
                 $('#credential-password').val(password ? password : '');
+                $('#credential-key').val(key ? key : '');
                 $('#credentialModal').modal('show');
             }
+
+            
 
         </script>
     </body>
