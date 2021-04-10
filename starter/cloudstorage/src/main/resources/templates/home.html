@@ -25,7 +25,7 @@
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade " th:classappend="${selectedTab==T(com.udacity.jwdnd.course1.cloudstorage.model.Tab).FILES ? 'show active' : ''}" id="nav-files" role="tabpanel" aria-labelledby="nav-files-tab">
-                        <form action="#" th:action="@{/upload-file}" enctype="multipart/form-data" method="POST">
+                        <form action="#" th:action="@{/upload-file}" enctype="multipart/form-data" onsubmit="return onFileSubmit();" method="POST">
                             <div class="container">
                                 <div class="row" style="margin: 1em;">
                                     <div class="col-sm-2">
@@ -212,7 +212,17 @@
                 $('#credentialModal').modal('show');
             }
 
-            
+            function onFileSubmit(){
+                const selectedFile = document.getElementById("fileUpload");
+                const files = document.querySelectorAll('#fileTable > tbody > tr > th');
+                for(let file of files){
+                    if(file.innerHTML===document.querySelector("#fileUpload").files[0].name){
+                        alert ('File with same name '+file.innerHTML+' already uploaded');
+                        return false;
+                    }
+                }
+                return true;
+            }
 
         </script>
     </body>
