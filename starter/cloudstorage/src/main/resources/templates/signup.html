@@ -12,15 +12,15 @@
 <body class="p-3 mb-2 bg-light text-black">
 <div class="container justify-content-center w-50 p-3" style="background-color: #eeeeee; margin-top: 5em;">
     <div class="form-group">
-        <label><a th:href="@{/login}">Back to Login</a></label>
+        <label><a id="loginLink" th:href="@{/login}">Back to Login</a></label>
     </div>
 
     <h1 class="display-5">Sign Up</h1>
     <form action="#" th:action="@{/signup}" th:object="${user}" method="POST">
-        <div th:if="*{userId!=null}" class="alert alert-dark">
+        <div th:if="*{userId!=null}" class="alert alert-dark" id="successMessage">
             You successfully signed up! Please continue to the <a>login</a> page.
         </div>
-        <div th:if="${usernameUnavailableError!=null}" class="alert alert-danger">
+        <div th:if="${usernameUnavailableError!=null}" class="alert alert-danger" id="errorMessage">
             <span th:text="${usernameUnavailableError}">Example Signup Error Message</span>
         </div>
         <div class="form-row">
@@ -47,7 +47,7 @@
                        placeholder="Enter Password" maxlength="20" required>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Sign Up</button>
+        <button id="signupButton" type="submit" class="btn btn-primary">Sign Up</button>
     </form>
 </div>
 </body>

@@ -14,5 +14,6 @@ public class CredentialsForm {
     private String url;
     private String username;
     private String password;
+    private String key;
     private String userid;
 }

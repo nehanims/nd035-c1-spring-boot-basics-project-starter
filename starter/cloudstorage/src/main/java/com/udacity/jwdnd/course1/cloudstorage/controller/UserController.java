@@ -22,7 +22,7 @@ public class UserController {
     public String getUserRegistrationForm(Authentication authentication, User user, Model mode){
         if (authentication == null || authentication instanceof AnonymousAuthenticationToken)
             return "signup";
-        else return "redirect:/home";//TODO need to add redirection to home page - this redirects to page but does not change the url back to home (will calling home controller gethomepage method work??)
+        else return "redirect:/home";
     }
 
     @PostMapping("/signup")
@@ -30,10 +30,9 @@ public class UserController {
 
         if(userService.isUsernameAvailable(user.getUsername())) {
             user = userService.registerNewUser(user);
-            System.out.println(user.toString());
         }
         else {
-            model.addAttribute("usernameUnavailableError", "Username unavailable");//TODO is this the best way to handle this on the front end?
+            model.addAttribute("usernameUnavailableError", "Username unavailable");//TODO is this the best way to handle this on the front end? - NO - use the result.html tags with flash attributes :https://knasmueller.net/how-to-set-a-flash-message-in-spring-boot-with-thymeleaf
             user.setUsername("");
         }
         model.addAttribute("user", user);

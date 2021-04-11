@@ -29,36 +29,53 @@ public class CredentialsService {
     }
 
     CredentialsForm getCredentialsForm(Credentials credentials){
-        String decryptedPassword = encryptionService.decryptValue(credentials.getPassword(), credentials.getKey());
+
         return CredentialsForm.builder()
                 .credentialId(credentials.getCredentialId())
                 .url(credentials.getUrl())
                 .username(credentials.getUsername())
-                .password(decryptedPassword)
+                .password(credentials.getPassword())
+                .key(credentials.getKey())
                 .build();
     }
 
     public void saveCredentials(CredentialsForm credentialsForm, Integer loggedInUserId) {
-        SecureRandom random = new SecureRandom();
-        byte[] key = new byte[16];
-        random.nextBytes(key);
-        String encodedKey = Base64.getEncoder().encodeToString(key);
-        String encryptedPassword = encryptionService.encryptValue(credentialsForm.getPassword(), encodedKey);
-        Credentials credentials = Credentials.builder()
-                .credentialId(credentialsForm.getCredentialId())
-                .url(credentialsForm.getUrl())
-                .username(credentialsForm.getUsername())
-                .key(encodedKey)
-                .password(encryptedPassword)
-                .userid(loggedInUserId)
-                .build();
-
-        if(credentials.getCredentialId()==null)
+        if(credentialsForm.getCredentialId()==null) {
+            SecureRandom random = new SecureRandom();
+            byte[] key = new byte[16];
+            random.nextBytes(key);
+            String encodedKey = Base64.getEncoder().encodeToString(key);
+            String encryptedPassword = encryptionService.encryptValue(credentialsForm.getPassword(), encodedKey);
+            Credentials credentials = Credentials.builder()
+                    .credentialId(credentialsForm.getCredentialId())
+                    .url(credentialsForm.getUrl())
+                    .username(credentialsForm.getUsername())
+                    .key(encodedKey)
+                    .password(encryptedPassword)
+                    .userid(loggedInUserId)
+                    .build();
             credentialsMapper.addCredentials(credentials);
-        else credentialsMapper.updateCredentials(credentials);
+        }
+        else {
+            String encryptedPassword = encryptionService.encryptValue(credentialsForm.getPassword(), credentialsForm.getKey());
+            Credentials credentials = Credentials.builder()
+                    .credentialId(credentialsForm.getCredentialId())
+                    .url(credentialsForm.getUrl())
+                    .username(credentialsForm.getUsername())
+                    .key(credentialsForm.getKey())
+                    .password(encryptedPassword)
+                    .userid(loggedInUserId)
+                    .build();
+            credentialsMapper.updateCredentials(credentials);
+        }
     }
 
     public void deleteCredentials(Integer credentialId) {
-        credentialsMapper.deleteCrededntials(credentialId);
+        credentialsMapper.deleteCredential(credentialId);
     }
+
+    public Credentials getCredentialByCredentialId(Integer id){
+        return credentialsMapper.getCredentialByCredentialId(id);
+    }
+
 }

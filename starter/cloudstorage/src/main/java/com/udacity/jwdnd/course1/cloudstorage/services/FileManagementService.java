@@ -29,7 +29,7 @@ public class FileManagementService {
                     .fileData(multipartFile.getBytes())
                     .build());
         } catch (IOException e) {
-            e.printStackTrace(); //TODO handle this somewhere
+            e.printStackTrace(); //TODO handle this somewhere - YES use flash attributes for a success message, maybe also error, but i feel like that should be something that the requires user acknowledgement too :https://knasmueller.net/how-to-set-a-flash-message-in-spring-boot-with-thymeleaf
         }
     }
 
