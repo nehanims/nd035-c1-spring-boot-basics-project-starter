@@ -23,7 +23,7 @@ public class NotesTab {
     private final WebDriver driver;
     private final WebDriverWait wait;
 
-    @FindBy(id="addNoteButton")//TODO rename this in the template - remember to manually check all usage
+    @FindBy(id="addNoteButton")
     private WebElement addNoteButton;
 
     @FindBy(id="saveNoteButton")

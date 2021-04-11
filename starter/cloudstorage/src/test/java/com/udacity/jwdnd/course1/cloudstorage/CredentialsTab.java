@@ -28,7 +28,7 @@ public class CredentialsTab {
     private final WebDriver driver;
     private final WebDriverWait wait;
 
-    @FindBy(id="addCredentialButton")//TODO rename this in the template - remember to manually check all usage
+    @FindBy(id="addCredentialButton")
     private WebElement addCredentialButton;
 
     @FindBy(id="saveCredentialButton")

@@ -20,7 +20,7 @@ public class Credential {
         credentialId = getCredentialId(deleteButton);
         url = credentialElement.findElement(By.tagName("th")).getText();
         username = credentialElement.findElements(By.tagName("td")).get(1).getText();
-        encryptedPassword = credentialElement.findElements(By.tagName("td")).get(2).getText();//TODO also need encryption/decryption for the password, or should i just manually decrypt it and hard code it here?
+        encryptedPassword = credentialElement.findElements(By.tagName("td")).get(2).getText();
     }
 
     private Integer getCredentialId(WebElement deleteButton) {

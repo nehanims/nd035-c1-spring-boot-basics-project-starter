@@ -25,7 +25,7 @@ public class CredentialsController {
         this.navigationService = navigationService;
     }
 
-    @PostMapping("/save-credential")//TODO rename to add-update
+    @PostMapping("/save-credential")
     public String saveCredentials(@ModelAttribute("credential") CredentialsForm credentialsForm, Authentication authentication, Model model){
         credentialsService.saveCredentials(credentialsForm, userService.getLoggedInUserId(authentication));
         return "redirect:/home";
