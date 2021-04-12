@@ -9,11 +9,25 @@
         <title>Home</title>
     </head>
     <body class="p-3 mb-2 bg-light text-black">
+
         <div class="container">
             <div id="logoutDiv">
                 <form th:action="@{/logout}" action="#" method="POST">
                     <button id="logoutButton" type="submit" class="btn btn-secondary float-right">Logout</button>
                 </form>
+            </div>
+            <div class="container justify-content-center w-50 p-3" style="margin-top: 5em;">
+                <div th:if="${successMessage!=null && successMessage!=''}" class="alert alert-success fill-parent">
+                    <span id="successMessage" th:text="${successMessage}">SUCCESS: Your changes were successfully saved.</span>
+                </div>
+                <div th:if="${saveErrorMessage!=null && saveErrorMessage!=''}" class="alert alert-danger fill-parent">
+                    <span id="saveErrorMessage" th:text="${saveErrorMessage}">ERROR: Your changes were not saved.</span>
+                </div>
+                <div th:unless="${errorMessage==null || errorMessage==''}" class="alert alert-danger fill-parent">
+                    <h1 class="display-5">Error</h1>
+                    <span>Example Error Message</span>
+                    <span>Click <a>here</a> to continue.</span>
+                </div>
             </div>
             <div id="contentDiv" style="clear: right;">
                 <nav style="clear: right;">
@@ -217,7 +231,7 @@
                 const files = document.querySelectorAll('#fileTable > tbody > tr > th');
                 for(let file of files){
                     if(file.innerHTML===document.querySelector("#fileUpload").files[0].name){
-                        alert ('File with same name '+file.innerHTML+' already uploaded');
+                        alert ('File '+file.innerHTML+' already exists');
                         return false;
                     }
                 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class CredentialsController {
@@ -26,14 +27,16 @@ public class CredentialsController {
     }
 
     @PostMapping("/save-credential")
-    public String saveCredentials(@ModelAttribute("credential") CredentialsForm credentialsForm, Authentication authentication, Model model){
+    public String saveCredentials(@ModelAttribute("credential") CredentialsForm credentialsForm, Authentication authentication, Model model, RedirectAttributes redirectAttributes){
         credentialsService.saveCredentials(credentialsForm, userService.getLoggedInUserId(authentication));
+        redirectAttributes.addFlashAttribute("successMessage", "SUCCESS: Credential saved successfully");
         return "redirect:/home";
     }
     
     @GetMapping("/delete-credential/{id}")
-    public String deleteCredentials(@PathVariable("id") Integer credentialId){
+    public String deleteCredentials(@PathVariable("id") Integer credentialId, RedirectAttributes redirectAttributes){
         credentialsService.deleteCredentials(credentialId);
+        redirectAttributes.addFlashAttribute("successMessage", "SUCCESS: Credential deleted successfully");
         return "redirect:/home";
     }
 

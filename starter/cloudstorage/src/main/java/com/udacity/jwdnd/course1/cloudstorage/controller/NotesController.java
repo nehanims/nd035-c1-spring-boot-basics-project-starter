@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class NotesController {
@@ -25,15 +26,17 @@ public class NotesController {
         this.navigationService = navigationService;
     }
 
-    @GetMapping("/delete-note/{id}")
-    public String deleteNote(@PathVariable("id") Integer noteId, Authentication authentication, Model model){
-        notesService.deleteNote(noteId);
+    @PostMapping("/save-note")
+    public String addNote(NoteForm noteForm, Authentication authentication, RedirectAttributes redirectAttributes){
+        notesService.addNote(noteForm, userService.getLoggedInUserId(authentication));
+        redirectAttributes.addFlashAttribute("successMessage", "SUCCESS: Note saved successfully");
         return "redirect:/home";
     }
 
-    @PostMapping("/save-note")
-    public String addNote(NoteForm noteForm, Authentication authentication, Model model){
-        notesService.addNote(noteForm, userService.getLoggedInUserId(authentication));
+    @GetMapping("/delete-note/{id}")
+    public String deleteNote(@PathVariable("id") Integer noteId, Authentication authentication, Model model, RedirectAttributes redirectAttributes){
+        notesService.deleteNote(noteId);
+        redirectAttributes.addFlashAttribute("successMessage", "SUCCESS: Note deleted successfully");
         return "redirect:/home";
     }
 

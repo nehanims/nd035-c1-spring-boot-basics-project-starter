@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class FileManagementController {
@@ -30,13 +31,14 @@ public class FileManagementController {
 
     //TODO add the parameters for the Home controller (probably only a list of files for this user)
     @PostMapping("/upload-file")
-    public String uploadFile(@RequestParam("fileUpload") MultipartFile multipartFile, Authentication authentication, Model model){
+    public String uploadFile(@RequestParam("fileUpload") MultipartFile multipartFile, Authentication authentication, RedirectAttributes redirectAttributes){
         fileService.uploadFile(multipartFile, userService.getLoggedInUserId(authentication));
+        redirectAttributes.addFlashAttribute("successMessage", "SUCCESS: File saved successfully");
         return "redirect:/home";
     }
 
     @GetMapping("/delete-file/{id}")
-    public String deleteFile(@PathVariable("id") Integer fileId) {
+    public String deleteFile(@PathVariable("id") Integer fileId, RedirectAttributes redirectAttributes) {
         //TODO before deleting or updating check if the current logged in user has the right to send the request, i.e delete this file,
         // in fact check this for all types of updates and deletes,
         // you could add a check in the update and delete for each file, note and credential query itself i.e. add to the where clause userid=loggedinuserid,
@@ -47,6 +49,7 @@ public class FileManagementController {
         //TODO how to handle multiple file upload?
 
         fileService.deleteFile(fileId);
+        redirectAttributes.addFlashAttribute("successMessage", "SUCCESS: File deleted successfully");
         return "redirect:/home";
     }
 
