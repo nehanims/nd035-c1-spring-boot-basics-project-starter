@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.stream.Collectors;
+
+import static com.udacity.jwdnd.course1.cloudstorage.util.Message.*;
+
 @Controller
 public class NotesController {
     private final NotesService notesService;
@@ -32,18 +36,17 @@ public class NotesController {
     public String addNote(NoteForm noteForm, Authentication authentication, RedirectAttributes redirectAttributes) throws CloudStorageApplicationException {
 
         Integer loggedInUserId = userService.getLoggedInUserId(authentication);
-        validateOperation(noteForm.getNoteId(), loggedInUserId);
-
+        validateOperation(noteForm, noteForm.getNoteId(), loggedInUserId);
         notesService.addNote(noteForm, loggedInUserId);
-        redirectAttributes.addFlashAttribute("successMessage", "SUCCESS: Note saved successfully");
+        redirectAttributes.addFlashAttribute("successMessage", NOTE_SAVED_SUCCESSFULLY);
         return "redirect:/home";
     }
 
     @GetMapping("/delete-note/{id}")
     public String deleteNote(@PathVariable("id") Integer noteId, Authentication authentication, Model model, RedirectAttributes redirectAttributes) throws CloudStorageApplicationException {
-        validateOperation(noteId, userService.getLoggedInUserId(authentication));
+        validateOperation(null, noteId, userService.getLoggedInUserId(authentication));
         notesService.deleteNote(noteId);
-        redirectAttributes.addFlashAttribute("successMessage", "SUCCESS: Note deleted successfully");
+        redirectAttributes.addFlashAttribute("successMessage", NOTE_DELETED_SUCCESSFULLY);
 
         return "redirect:/home";
     }
@@ -53,13 +56,24 @@ public class NotesController {
         navigationService.setSelectedTab(Tab.NOTES);
     }
 
-    private void validateOperation(Integer noteId, Integer loggedInUserId) throws CloudStorageApplicationException {
+    private void validateOperation(NoteForm noteForm, Integer noteId, Integer loggedInUserId) throws CloudStorageApplicationException {
         if(noteId !=null) {
             Notes note = notesService.getNoteByNoteId(noteId);
             if(note==null)
-                throw new CloudStorageApplicationException("ERROR: Operation failed: file does not exist");
+                throw new CloudStorageApplicationException(NOTE_DOES_NOT_EXIST);
             if (!note.getUserId().equals(loggedInUserId))
-                throw new CloudStorageApplicationException("ERROR: Operation not allowed");
+                throw new CloudStorageApplicationException(OPERATION_NOT_ALLOWED);
+        }
+
+        if(noteForm!=null){
+            if(noteForm.getNoteDescription().length()>100)
+                throw new CloudStorageApplicationException(NOTE_DESCRIPTION_EXCEEDS_LIMIT);
+
+            boolean isDuplicateNote = notesService.getNotes(loggedInUserId)
+                    .stream()
+                    .anyMatch(noteForm1 -> noteForm1.getNoteTitle().equals(noteForm.getNoteTitle()) && noteForm1.getNoteDescription().equals(noteForm.getNoteDescription()));
+            if(isDuplicateNote)
+                throw new CloudStorageApplicationException(DUPLICATE_NOTE);
         }
     }
 }

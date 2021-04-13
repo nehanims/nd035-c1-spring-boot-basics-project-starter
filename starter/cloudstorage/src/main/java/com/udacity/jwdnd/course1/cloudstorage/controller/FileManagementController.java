@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import static com.udacity.jwdnd.course1.cloudstorage.util.Message.*;
+
 import java.io.IOException;
 
 @Controller
@@ -35,7 +37,7 @@ public class FileManagementController {
     public String uploadFile(@RequestParam("fileUpload") MultipartFile multipartFile, Authentication authentication, RedirectAttributes redirectAttributes) throws IOException {
 
         fileService.uploadFile(multipartFile, userService.getLoggedInUserId(authentication));
-        redirectAttributes.addFlashAttribute("successMessage", "SUCCESS: File saved successfully");
+        redirectAttributes.addFlashAttribute("successMessage", FILE_SAVED_SUCCESSFULLY);
         return "redirect:/home";
     }
 
@@ -44,7 +46,7 @@ public class FileManagementController {
         validateOperation(fileId, userService.getLoggedInUserId(authentication));
 
         fileService.deleteFile(fileId);
-        redirectAttributes.addFlashAttribute("successMessage", "SUCCESS: File deleted successfully");
+        redirectAttributes.addFlashAttribute("successMessage", FILE_DELETED_SUCCESSFULLY);
         return "redirect:/home";
     }
 
@@ -53,6 +55,7 @@ public class FileManagementController {
 
         validateOperation(fileId, userService.getLoggedInUserId(authentication));
         Files file = fileService.getFileByFileId(fileId);
+        //Referenced https://knowledge.udacity.com/questions/328879
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.parseMediaType(file.getContentType()))
@@ -64,9 +67,9 @@ public class FileManagementController {
         if(fileId !=null){
             Files file = fileService.getFileByFileId(fileId);
             if(file==null)
-                throw new CloudStorageApplicationException("ERROR: Operation failed: file does not exist");
+                throw new CloudStorageApplicationException(FILE_DOES_NOT_EXIST);
             if(!file.getUserId().equals(loggedInUserId))
-                throw new CloudStorageApplicationException("ERROR: Operation not allowed");
+                throw new CloudStorageApplicationException(OPERATION_NOT_ALLOWED);
         }
     }
 

@@ -227,11 +227,19 @@
             }
 
             function onFileSubmit(){
-                const selectedFile = document.getElementById("fileUpload");
+                const fileUploadElement = document.querySelector("#fileUpload");
+                const selectedFile = fileUploadElement.files[0];
+                if(selectedFile.size>1000000){
+                    alert ('File '+selectedFile.name+' is larger than the allowed maximum size of 1MB');
+                    fileUploadElement.value='';
+                    return false;
+                }
+
                 const files = document.querySelectorAll('#fileTable > tbody > tr > th');
                 for(let file of files){
-                    if(file.innerHTML===document.querySelector("#fileUpload").files[0].name){
+                    if(file.innerHTML===selectedFile.name){
                         alert ('File '+file.innerHTML+' already exists');
+                        fileUploadElement.value='';
                         return false;
                     }
                 }

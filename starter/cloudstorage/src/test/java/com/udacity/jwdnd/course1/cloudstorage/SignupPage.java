@@ -17,9 +17,6 @@ public class SignupPage {
     @FindBy(id ="loginLink")
     private WebElement loginLink;
 
-    @FindBy(id ="successMessage")
-    private WebElement successMessage;
-
     @FindBy(id ="errorMessage")
     private WebElement errorMessage;
 
@@ -66,14 +63,6 @@ public class SignupPage {
 
     public WebElement getErrorMessage(){
         return errorMessage;
-    }
-
-    public WebElement getSuccessMessage(){
-        return successMessage;
-    }
-
-    public void navigateToLogin() {
-        loginLink.click();
     }
 
 

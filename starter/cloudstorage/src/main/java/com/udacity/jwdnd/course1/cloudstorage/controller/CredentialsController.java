@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import static com.udacity.jwdnd.course1.cloudstorage.util.Message.*;
+
 @Controller
 public class CredentialsController {
     private final CredentialsService credentialsService;
@@ -31,19 +33,19 @@ public class CredentialsController {
     @PostMapping("/save-credential")
     public String saveCredentials(@ModelAttribute("credential") CredentialsForm credentialsForm, Authentication authentication, Model model, RedirectAttributes redirectAttributes) throws CloudStorageApplicationException {
         Integer loggedInUserId = userService.getLoggedInUserId(authentication);
-        validateOperationAuthorized(credentialsForm.getCredentialId(), loggedInUserId);
+        validateOperationAuthorized(credentialsForm, credentialsForm.getCredentialId(), loggedInUserId);
 
         credentialsService.saveCredentials(credentialsForm, userService.getLoggedInUserId(authentication));
-        redirectAttributes.addFlashAttribute("successMessage", "SUCCESS: Credential saved successfully");
+        redirectAttributes.addFlashAttribute("successMessage", CREDENTIAL_SAVED_SUCCESSFULLY);
         return "redirect:/home";
     }
     
     @GetMapping("/delete-credential/{id}")
     public String deleteCredentials(@PathVariable("id") Integer credentialId, Authentication authentication, RedirectAttributes redirectAttributes) throws CloudStorageApplicationException {
-        validateOperationAuthorized(credentialId, userService.getLoggedInUserId(authentication));
+        validateOperationAuthorized(null, credentialId, userService.getLoggedInUserId(authentication));
 
         credentialsService.deleteCredentials(credentialId);
-        redirectAttributes.addFlashAttribute("successMessage", "SUCCESS: Credential deleted successfully");
+        redirectAttributes.addFlashAttribute("successMessage", CREDENTIAL_DELETED_SUCCESSFULLY);
         return "redirect:/home";
     }
 
@@ -53,13 +55,21 @@ public class CredentialsController {
     }
 
 
-    private void validateOperationAuthorized(Integer credentialId, Integer loggedInUserId) throws CloudStorageApplicationException {
+    private void validateOperationAuthorized(CredentialsForm credentialsForm, Integer credentialId, Integer loggedInUserId) throws CloudStorageApplicationException {
         if(credentialId !=null) {
             Credentials credential = credentialsService.getCredentialByCredentialId(credentialId);
             if(credential==null)
-                throw new CloudStorageApplicationException("ERROR: Operation failed: credential does not exist");
+                throw new CloudStorageApplicationException(CREDENTIAL_DOES_NOT_EXIST);
             if (!credential.getUserId().equals(loggedInUserId))
-                throw new CloudStorageApplicationException("ERROR: Operation not allowed");
+                throw new CloudStorageApplicationException(OPERATION_NOT_ALLOWED);
+        }
+
+        if(credentialsForm!=null){
+            boolean isDuplicateCredential = credentialsService.getCredentials(loggedInUserId)
+                    .stream()
+                    .anyMatch(credentialsForm1 -> credentialsForm1.getUrl().equals(credentialsForm.getUrl()) && credentialsForm1.getUsername().equals(credentialsForm.getUsername()));
+            if(isDuplicateCredential)
+                throw new CloudStorageApplicationException(DUPLICATE_CREDENTIAL);
         }
     }
 }
