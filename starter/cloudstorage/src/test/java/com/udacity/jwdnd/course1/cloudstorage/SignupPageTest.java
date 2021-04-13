@@ -52,12 +52,14 @@ class SignupPageTest {
     @Order(1)
     void testSignupValid(){
         signupPage.signup(SignupPage.FIRSTNAME, SignupPage.LAST_NAME, SignupPage.USERNAME, SignupPage.PASSWORD);
-        webDriverWait.until(webDriver -> webDriver.findElement(By.id("successMessage")));
-        assertTrue(signupPage.getSuccessMessage().isDisplayed());
+        webDriverWait.until(webDriver -> driver.findElement(By.id("loginButton")));
+        assertTrue(loginPage.successMessageIsDsplayed());
 
+        driver.get("http://localhost:" + this.port + "/signup");
         signupPage.signup(SignupPage.FIRSTNAME, SignupPage.LAST_NAME, SignupPage.USERNAME2, SignupPage.PASSWORD);
-        webDriverWait.until(webDriver -> webDriver.findElement(By.id("successMessage")));
-        assertTrue(signupPage.getSuccessMessage().isDisplayed());
+        webDriverWait.until(webDriver -> driver.findElement(By.id("loginButton")));
+        assertTrue(loginPage.successMessageIsDsplayed());
+
     }
 
     @Test
@@ -71,7 +73,7 @@ class SignupPageTest {
     @Test
     @Order(3)//TODO move to LoginPageTest
     void testHomePageAccessAfterLogin(){
-        signupPage.navigateToLogin();
+        navigateToLogin();
         webDriverWait.until(webDriver -> driver.findElement(By.id("loginButton")));
         assertEquals("Login", driver.getTitle());
         loginPage.login();
@@ -82,7 +84,7 @@ class SignupPageTest {
     @Test
     @Order(3)
     void testLogout(){
-        signupPage.navigateToLogin();
+        navigateToLogin();
         webDriverWait.until(webDriver -> driver.findElement(By.id("loginButton")));
         assertEquals("Login", driver.getTitle());
         loginPage.login();
@@ -103,12 +105,18 @@ class SignupPageTest {
     @Test
     @Order(4)
     void testLoginPageAccessAfterLogin() {
-        signupPage.navigateToLogin();
+        navigateToLogin();
         webDriverWait.until(webDriver -> driver.findElement(By.id("loginButton")));
         assertEquals("Login", driver.getTitle());
         loginPage.login();
         webDriverWait.until(webDriver -> driver.findElement(By.id("logoutButton")));
         assertEquals("Home", driver.getTitle());
     }
+
+
+    public void navigateToLogin() {
+        driver.get("http://localhost:" + this.port + "/login");
+    }
+
 
 }

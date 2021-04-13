@@ -12,6 +12,9 @@ public class LoginPage {
 
     private WebDriver webDriver;
 
+    @FindBy(id ="successMessage")
+    private WebElement successMessage;
+
     @FindBy(id ="inputUsername")
     private WebElement usernameField;
 
@@ -31,6 +34,7 @@ public class LoginPage {
     }
 
     public void login(String username, String password) {
+
         WebDriverWait webDriverWait = new WebDriverWait(webDriver, 10);
         webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("inputUsername")));
         usernameField.clear();
@@ -42,6 +46,11 @@ public class LoginPage {
         passwordField.sendKeys(password);
 
         loginButton.click();
+    }
+
+
+    public boolean successMessageIsDsplayed() {
+        return successMessage.isDisplayed();
     }
 
 

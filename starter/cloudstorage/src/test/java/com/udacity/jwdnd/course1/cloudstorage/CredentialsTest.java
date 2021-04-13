@@ -47,8 +47,7 @@ class CredentialsTest {
         homePage = new HomePage(driver);
         credentialsTab = new CredentialsTab(driver, webDriverWait);
 
-        driver.get("http://localhost:" + port + "/signup");
-        homePage.signupAndLogin();//TODO signup everytime seems like bad practice but BeforeAll method is static for some reason
+        homePage.signupAndLogin(port);//TODO signup everytime seems like bad practice but BeforeAll method is static for some reason
         homePage.navigateToCredentialsTab();
 
     }

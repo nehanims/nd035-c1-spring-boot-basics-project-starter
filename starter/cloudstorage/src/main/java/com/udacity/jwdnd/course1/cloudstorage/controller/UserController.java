@@ -35,6 +35,7 @@ public class UserController {
         else {
             model.addAttribute("usernameUnavailableError", "Username unavailable");//TODO is this the best way to handle this on the front end? - NO - use the error.html tags with flash attributes :https://knasmueller.net/how-to-set-a-flash-message-in-spring-boot-with-thymeleaf
             user.setUsername("");
+            return "signup";
         }
         model.addAttribute("user", user);
 

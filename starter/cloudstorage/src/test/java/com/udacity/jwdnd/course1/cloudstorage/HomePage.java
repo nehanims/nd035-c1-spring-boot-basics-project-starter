@@ -7,6 +7,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 public class HomePage {
+    private final WebDriver driver;
     @FindBy(id="logoutButton")
     private WebElement logoutButton;
 
@@ -23,8 +24,10 @@ public class HomePage {
     private LoginPage loginPage;
 
     public HomePage(WebDriver driver) {
+
         this.signupPage = new SignupPage(driver);
         this.loginPage = new LoginPage(driver);
+        this.driver = driver;
         PageFactory.initElements(driver, this);
     }
 
@@ -32,9 +35,10 @@ public class HomePage {
         logoutButton.click();
     }
 
-    public void signupAndLogin(){
+    public void signupAndLogin(Integer port){
+        driver.get("http://localhost:" + port + "/signup");
         signupPage.signup();
-        signupPage.navigateToLogin();
+        driver.get("http://localhost:" + port + "/login");
         loginPage.login();
     }
 
