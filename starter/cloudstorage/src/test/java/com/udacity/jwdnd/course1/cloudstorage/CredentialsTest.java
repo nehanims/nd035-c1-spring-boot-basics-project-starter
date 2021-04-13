@@ -101,7 +101,6 @@ class CredentialsTest {
     @Order(2)
     void testDeleteCredentials(){
 
-
         //verify that 2 records are available and verify the content of the records
         List<Credential> credentials = credentialsTab.getCredentials();
         assertEquals(2 , credentials.size());
@@ -131,14 +130,18 @@ class CredentialsTest {
         credentials = credentialsTab.getCredentials();
         assertEquals(0 , credentials.size());
 
+
+        //add the records back for the next test!
+        credentialsTab.addCredentials(CredentialsTab.URL1, CredentialsTab.USERNAME1, CredentialsTab.PLAIN_TEXT_PASSWORD1);
+        credentialsTab.addCredentials(CredentialsTab.URL2, CredentialsTab.USERNAME2, CredentialsTab.PLAIN_TEXT_PASSWORD2);
+        credentials = credentialsTab.getCredentials();
+        assertEquals(2, credentials.size());
+
     }
 
     @Test
     @Order(3)
     void testEditCredentials(){
-        //add 2 credential records
-        credentialsTab.addCredentials(CredentialsTab.URL1, CredentialsTab.USERNAME1, CredentialsTab.PLAIN_TEXT_PASSWORD1);
-        credentialsTab.addCredentials(CredentialsTab.URL2, CredentialsTab.USERNAME2, CredentialsTab.PLAIN_TEXT_PASSWORD2);
         List<Credential> credentials = credentialsTab.getCredentials();
         assertEquals(2, credentials.size());
 
@@ -162,10 +165,8 @@ class CredentialsTest {
         assertEquals(CredentialsTab.USERNAME1, displayedCredentialForm1.getUsername());
         assertEquals(CredentialsTab.PLAIN_TEXT_PASSWORD1, displayedCredentialForm1.getPlainTextPassword());
 
-
         //make changes and save the credential form data
         credentialsTab.saveCredentialForm(CredentialsTab.URL1_EDITED, CredentialsTab.USERNAME1, CredentialsTab.PLAIN_TEXT_PASSWORD1_EDITED);
-
 
         //verify that the changes have been successfully made and the updated encrypted password is displayed in the table
         credentials = credentialsTab.getCredentials();

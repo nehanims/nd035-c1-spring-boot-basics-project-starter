@@ -62,6 +62,7 @@ public class NotesTab {
 
     public List<Note> getNotes() {
         //TODO see best practice for this.. also refer http://elementalselenium.com/tips/25-tables*/
+
         return driver.findElements(By.cssSelector("#notesTable > tbody > tr"))
                 .stream()
                 .map(Note::new)
