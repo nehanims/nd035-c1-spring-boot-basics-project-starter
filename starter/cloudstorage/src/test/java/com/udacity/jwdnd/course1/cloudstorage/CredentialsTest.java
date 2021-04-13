@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class CredentialsTest {
+class CredentialsTest {
     @LocalServerPort
     private int port;
 
@@ -62,7 +62,7 @@ public class CredentialsTest {
 
     @Test
     @Order(1)
-    public void testAddNote(){
+    void testAddCredentials(){
 
         // add 2 sets of credentials and verify that both are displayed
         credentialsTab.addCredentials(CredentialsTab.URL1, CredentialsTab.USERNAME1, CredentialsTab.PLAIN_TEXT_PASSWORD1);
@@ -99,7 +99,7 @@ public class CredentialsTest {
 
     @Test
     @Order(2)
-    public void testDeleteCredentials(){
+    void testDeleteCredentials(){
 
 
         //verify that 2 records are available and verify the content of the records
@@ -135,7 +135,7 @@ public class CredentialsTest {
 
     @Test
     @Order(3)
-    public void testEditCredentials(){
+    void testEditCredentials(){
         //add 2 credential records
         credentialsTab.addCredentials(CredentialsTab.URL1, CredentialsTab.USERNAME1, CredentialsTab.PLAIN_TEXT_PASSWORD1);
         credentialsTab.addCredentials(CredentialsTab.URL2, CredentialsTab.USERNAME2, CredentialsTab.PLAIN_TEXT_PASSWORD2);

@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SignupPageTest {
+class SignupPageTest {
 
     @LocalServerPort
     private int port;
@@ -48,14 +48,9 @@ public class SignupPageTest {
         }
     }
 
-    /*@Test
-    public void getSignupPage() {
-        assertEquals("Sign Up", driver.getTitle());
-    }*/
-
     @Test
     @Order(1)
-    public void testSignupValid(){
+    void testSignupValid(){
         signupPage.signup(SignupPage.FIRSTNAME, SignupPage.LAST_NAME, SignupPage.USERNAME, SignupPage.PASSWORD);
         webDriverWait.until(webDriver -> webDriver.findElement(By.id("successMessage")));
         assertTrue(signupPage.getSuccessMessage().isDisplayed());
@@ -67,7 +62,7 @@ public class SignupPageTest {
 
     @Test
     @Order(2)
-    public void testSignupUserExists(){
+    void testSignupUserExists(){
         signupPage.signup();
         webDriverWait.until(webDriver -> webDriver.findElement(By.id("errorMessage")));
         assertTrue(signupPage.getErrorMessage().isDisplayed());
@@ -75,7 +70,7 @@ public class SignupPageTest {
 
     @Test
     @Order(3)//TODO move to LoginPageTest
-    public void testHomePageAccessAfterLogin(){
+    void testHomePageAccessAfterLogin(){
         signupPage.navigateToLogin();
         webDriverWait.until(webDriver -> driver.findElement(By.id("loginButton")));
         assertEquals("Login", driver.getTitle());
@@ -86,7 +81,7 @@ public class SignupPageTest {
 
     @Test
     @Order(3)
-    public void testLogout(){
+    void testLogout(){
         signupPage.navigateToLogin();
         webDriverWait.until(webDriver -> driver.findElement(By.id("loginButton")));
         assertEquals("Login", driver.getTitle());
@@ -99,15 +94,15 @@ public class SignupPageTest {
 
     @Test
     @Order(4)//TODO move test to homepage tests // TODO also add tests for get on other resources directly
-    public void testHomePageAccessBeforeLogin() throws InterruptedException {
+    void testHomePageAccessBeforeLogin() {
         driver.get("http://localhost:" + this.port + "/home");
-        Thread.sleep(1000);
+        webDriverWait.until(webDriver -> driver.findElement(By.id("loginButton")));
         assertEquals("Login", driver.getTitle());
     }
 
     @Test
     @Order(4)
-    public void testLoginPageAccessAfterLogin() throws InterruptedException {
+    void testLoginPageAccessAfterLogin() {
         signupPage.navigateToLogin();
         webDriverWait.until(webDriver -> driver.findElement(By.id("loginButton")));
         assertEquals("Login", driver.getTitle());

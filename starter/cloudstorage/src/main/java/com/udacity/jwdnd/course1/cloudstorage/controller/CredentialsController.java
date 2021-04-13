@@ -1,5 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
+import com.udacity.jwdnd.course1.cloudstorage.exception.CloudStorageApplicationException;
+import com.udacity.jwdnd.course1.cloudstorage.model.Credentials;
 import com.udacity.jwdnd.course1.cloudstorage.model.CredentialsForm;
 import com.udacity.jwdnd.course1.cloudstorage.model.Tab;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredentialsService;
@@ -27,14 +29,19 @@ public class CredentialsController {
     }
 
     @PostMapping("/save-credential")
-    public String saveCredentials(@ModelAttribute("credential") CredentialsForm credentialsForm, Authentication authentication, Model model, RedirectAttributes redirectAttributes){
+    public String saveCredentials(@ModelAttribute("credential") CredentialsForm credentialsForm, Authentication authentication, Model model, RedirectAttributes redirectAttributes) throws CloudStorageApplicationException {
+        Integer loggedInUserId = userService.getLoggedInUserId(authentication);
+        validateOperationAuthorized(credentialsForm.getCredentialId(), loggedInUserId);
+
         credentialsService.saveCredentials(credentialsForm, userService.getLoggedInUserId(authentication));
         redirectAttributes.addFlashAttribute("successMessage", "SUCCESS: Credential saved successfully");
         return "redirect:/home";
     }
     
     @GetMapping("/delete-credential/{id}")
-    public String deleteCredentials(@PathVariable("id") Integer credentialId, RedirectAttributes redirectAttributes){
+    public String deleteCredentials(@PathVariable("id") Integer credentialId, Authentication authentication, RedirectAttributes redirectAttributes) throws CloudStorageApplicationException {
+        validateOperationAuthorized(credentialId, userService.getLoggedInUserId(authentication));
+
         credentialsService.deleteCredentials(credentialId);
         redirectAttributes.addFlashAttribute("successMessage", "SUCCESS: Credential deleted successfully");
         return "redirect:/home";
@@ -43,5 +50,16 @@ public class CredentialsController {
     @ModelAttribute
     public void addModelAttribute(){
         navigationService.setSelectedTab(Tab.CREDENTIALS);
+    }
+
+
+    private void validateOperationAuthorized(Integer credentialId, Integer loggedInUserId) throws CloudStorageApplicationException {
+        if(credentialId !=null) {
+            Credentials credential = credentialsService.getCredentialByCredentialId(credentialId);
+            if(credential==null)
+                throw new CloudStorageApplicationException("ERROR: Operation failed: credential does not exist");
+            if (!credential.getUserId().equals(loggedInUserId))
+                throw new CloudStorageApplicationException("ERROR: Operation not allowed");
+        }
     }
 }

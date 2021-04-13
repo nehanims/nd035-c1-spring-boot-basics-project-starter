@@ -12,11 +12,14 @@ public interface NotesMapper {
     void saveNote(Notes note);
 
     @Select("SELECT * FROM Notes WHERE userid= #{userId}")
-    List<Notes> getNotes(Integer userId);
+    List<Notes> getNotesByUserId(Integer userId);
 
     @Delete("DELETE FROM Notes where noteid=#{noteId}")
     void deleteNote(Integer noteId);
 
     @Update("UPDATE Notes SET noteTitle=#{noteTitle}, noteDescription=#{noteDescription} WHERE noteId=#{noteId} ")
     void updateNote(Notes note);
+
+    @Select("SELECT * FROM Notes WHERE noteid= #{noteId}")
+    Notes getNoteByNoteId(Integer noteId);
 }

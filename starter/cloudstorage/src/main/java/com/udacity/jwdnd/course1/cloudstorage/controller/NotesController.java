@@ -1,6 +1,8 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
+import com.udacity.jwdnd.course1.cloudstorage.exception.CloudStorageApplicationException;
 import com.udacity.jwdnd.course1.cloudstorage.model.NoteForm;
+import com.udacity.jwdnd.course1.cloudstorage.model.Notes;
 import com.udacity.jwdnd.course1.cloudstorage.model.Tab;
 import com.udacity.jwdnd.course1.cloudstorage.services.NavigationService;
 import com.udacity.jwdnd.course1.cloudstorage.services.NotesService;
@@ -27,23 +29,37 @@ public class NotesController {
     }
 
     @PostMapping("/save-note")
-    public String addNote(NoteForm noteForm, Authentication authentication, RedirectAttributes redirectAttributes){
-        notesService.addNote(noteForm, userService.getLoggedInUserId(authentication));
+    public String addNote(NoteForm noteForm, Authentication authentication, RedirectAttributes redirectAttributes) throws CloudStorageApplicationException {
+
+        Integer loggedInUserId = userService.getLoggedInUserId(authentication);
+        validateOperation(noteForm.getNoteId(), loggedInUserId);
+
+        notesService.addNote(noteForm, loggedInUserId);
         redirectAttributes.addFlashAttribute("successMessage", "SUCCESS: Note saved successfully");
         return "redirect:/home";
     }
 
     @GetMapping("/delete-note/{id}")
-    public String deleteNote(@PathVariable("id") Integer noteId, Authentication authentication, Model model, RedirectAttributes redirectAttributes){
+    public String deleteNote(@PathVariable("id") Integer noteId, Authentication authentication, Model model, RedirectAttributes redirectAttributes) throws CloudStorageApplicationException {
+        validateOperation(noteId, userService.getLoggedInUserId(authentication));
         notesService.deleteNote(noteId);
         redirectAttributes.addFlashAttribute("successMessage", "SUCCESS: Note deleted successfully");
+
         return "redirect:/home";
     }
 
-    //TODO What is the right way to do this?? Should this be implemented using aspects? Or maybe controller advice?: NO - I think flash attributes may be the correct way to do this since they survive redirects: https://knasmueller.net/how-to-set-a-flash-message-in-spring-boot-with-thymeleaf
     @ModelAttribute
     public void addModelAttribute(){
         navigationService.setSelectedTab(Tab.NOTES);
     }
 
+    private void validateOperation(Integer noteId, Integer loggedInUserId) throws CloudStorageApplicationException {
+        if(noteId !=null) {
+            Notes note = notesService.getNoteByNoteId(noteId);
+            if(note==null)
+                throw new CloudStorageApplicationException("ERROR: Operation failed: file does not exist");
+            if (!note.getUserId().equals(loggedInUserId))
+                throw new CloudStorageApplicationException("ERROR: Operation not allowed");
+        }
+    }
 }
