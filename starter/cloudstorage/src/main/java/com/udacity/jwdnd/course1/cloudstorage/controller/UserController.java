@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class UserController {
@@ -26,18 +27,19 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public String registerNewUser(User user, Model model) {//TODO use a UserForm instead of the actual Entity class
+    public String registerNewUser(User user, Model model, RedirectAttributes redirectAttributes) {//TODO use a UserForm instead of the actual Entity class
 
         if(userService.isUsernameAvailable(user.getUsername())) {
             user = userService.registerNewUser(user);
         }
         else {
-            model.addAttribute("usernameUnavailableError", "Username unavailable");//TODO is this the best way to handle this on the front end? - NO - use the result.html tags with flash attributes :https://knasmueller.net/how-to-set-a-flash-message-in-spring-boot-with-thymeleaf
+            model.addAttribute("usernameUnavailableError", "Username unavailable");//TODO is this the best way to handle this on the front end? - NO - use the error.html tags with flash attributes :https://knasmueller.net/how-to-set-a-flash-message-in-spring-boot-with-thymeleaf
             user.setUsername("");
         }
         model.addAttribute("user", user);
 
-        return "signup";
+        redirectAttributes.addFlashAttribute("successfulSignup", true);
+        return "redirect:/login";
     }
 
     @GetMapping("/login")

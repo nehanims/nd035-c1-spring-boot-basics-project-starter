@@ -16,12 +16,5 @@ public class Files {
     private String fileSize;
     private Integer userId;
     private byte[] fileData;
-    //TODO not sure if this was the right approach, but I used a byte array, based on the following responses:
-    // https://knowledge.udacity.com/questions/282016
-    // https://knowledge.udacity.com/questions/395587
-    // https://knowledge.udacity.com/questions/479892
-    // https://knowledge.udacity.com/questions/292288
-    // https://knowledge.udacity.com/questions/341427
-
 
 }

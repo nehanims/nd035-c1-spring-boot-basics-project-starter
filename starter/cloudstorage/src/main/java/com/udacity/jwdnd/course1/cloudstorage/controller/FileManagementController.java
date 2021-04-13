@@ -53,6 +53,7 @@ public class FileManagementController {
 
         validateOperation(fileId, userService.getLoggedInUserId(authentication));
         Files file = fileService.getFileByFileId(fileId);
+        //Referenced https://knowledge.udacity.com/questions/328879
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.parseMediaType(file.getContentType()))

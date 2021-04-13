@@ -38,6 +38,4 @@ public class CloudStorageExceptionHandler{
         return redirectView;
     }
 
-    //TODO Also add a default handler like a catch all and return the result page
-
 }
