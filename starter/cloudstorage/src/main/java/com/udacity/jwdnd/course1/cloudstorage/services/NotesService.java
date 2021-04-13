@@ -29,7 +29,7 @@ public class NotesService {
     }
 
     public List<NoteForm> getNotes(Integer userId) {
-        return notesMapper.getNotes(userId)
+        return notesMapper.getNotesByUserId(userId)
                 .stream()
                 .map(this::getNoteForm)
                 .collect(Collectors.toList());
@@ -46,5 +46,9 @@ public class NotesService {
                 .noteTitle(note.getNoteTitle())
                 .noteDescription(note.getNoteDescription())
                 .build();
+    }
+
+    public Notes getNoteByNoteId(Integer noteId) {
+        return notesMapper.getNoteByNoteId(noteId);
     }
 }

@@ -108,15 +108,21 @@ public class NotesTest {
         notes = notesTab.getNotes();
         assertTrue(notes.size()==0);
 
+        //add the notes back for the next test!
+        notesTab.addNote(NotesTab.TITLE1, NotesTab.DESCRIPTION1);
+        webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("notesTable")));
+
+        notesTab.addNote(NotesTab.TITLE2, NotesTab.DESCRIPTION2);
+        webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("notesTable")));
+        notes = notesTab.getNotes();
+        assertTrue(notes.size()==2);
+
+
     }
 
     @Test
     @Order(3)
     public void testEditNote() {
-        notesTab.addNote(NotesTab.TITLE1, NotesTab.DESCRIPTION1);
-        webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("notesTable")));
-
-        notesTab.addNote(NotesTab.TITLE2, NotesTab.DESCRIPTION2);
         webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("notesTable")));
         List<Note> notes = notesTab.getNotes();
         assertTrue(notes.size()==2);

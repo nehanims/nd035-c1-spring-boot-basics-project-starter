@@ -52,7 +52,7 @@ public class CredentialsService {
                     .username(credentialsForm.getUsername())
                     .key(encodedKey)
                     .password(encryptedPassword)
-                    .userid(loggedInUserId)
+                    .userId(loggedInUserId)
                     .build();
             credentialsMapper.addCredentials(credentials);
         }
@@ -64,7 +64,7 @@ public class CredentialsService {
                     .username(credentialsForm.getUsername())
                     .key(credentialsForm.getKey())
                     .password(encryptedPassword)
-                    .userid(loggedInUserId)
+                    .userId(loggedInUserId)
                     .build();
             credentialsMapper.updateCredentials(credentials);
         }

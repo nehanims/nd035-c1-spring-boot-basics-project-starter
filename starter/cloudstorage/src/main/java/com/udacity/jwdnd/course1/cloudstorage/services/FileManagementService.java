@@ -18,9 +18,7 @@ public class FileManagementService {
         this.fileMapper = fileMapper;
     }
 
-    public void uploadFile(MultipartFile multipartFile, Integer userId) {
-        try {
-            //TODO don't allow files with the same name
+    public void uploadFile(MultipartFile multipartFile, Integer userId) throws IOException {
             fileMapper.saveFile(Files.builder()
                     .filename(multipartFile.getOriginalFilename())
                     .contentType(multipartFile.getContentType())
@@ -28,9 +26,6 @@ public class FileManagementService {
                     .userId(userId)
                     .fileData(multipartFile.getBytes())
                     .build());
-        } catch (IOException e) {
-            e.printStackTrace(); //TODO handle this somewhere - YES use flash attributes for a success message, maybe also error, but i feel like that should be something that the requires user acknowledgement too :https://knasmueller.net/how-to-set-a-flash-message-in-spring-boot-with-thymeleaf
-        }
     }
 
     public List<FileForm> getFiles(Integer loggedInUserId) {
@@ -54,7 +49,7 @@ public class FileManagementService {
         fileMapper.deleteFile(fileId);
     }
 
-    public Files getFileByFileId(Long fileId) {
+    public Files getFileByFileId(Integer fileId) {
         return fileMapper.getFile(fileId);
     }
 }
